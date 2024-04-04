@@ -17,7 +17,7 @@ parser.add_argument(
     "--model_id",
     type=str,
     help="Path to the training data",
-    default="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    default="openai-community/gpt2",
 )
 
 
