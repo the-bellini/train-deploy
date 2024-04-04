@@ -8,3 +8,4 @@ azure-ai-ml==1.15.0
 azure-identity==1.15.0
 bitsandbytes==0.42.0
 accelerate==0.28.0
+python-dotenv==1.0.1

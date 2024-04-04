@@ -7,11 +7,7 @@ import mlflow
 import pandas as pd
 import transformers
 from azure.ai.ml import MLClient
-from azure.identity import (
-    DefaultAzureCredential,
-    InteractiveBrowserCredential,
-    EnvironmentCredential,
-)
+from azure.identity import EnvironmentCredential
 from transformers import EarlyStoppingCallback, IntervalStrategy
 
 from initialise_model import initialise
