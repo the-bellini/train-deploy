@@ -47,22 +47,23 @@ def initialise(model_id: str):
     # logging.info("Prepare model for 4 bit training")
     # model = prepare_model_for_kbit_training(model)
 
-    config = LoraConfig(
-        r=8,
-        # lora_alpha=32,
-        target_modules=[
-            "q_proj",
-            "o_proj",
-            "k_proj",
-            "v_proj",
-            "gate_proj",
-            "up_proj",
-            "down_proj",
-        ],
-        # lora_dropout=0.05,
-        # bias="none",
-        task_type="CAUSAL_LM",
-    )
+    # config = LoraConfig(
+    #     r=8,
+    #     # lora_alpha=32,
+    #     target_modules=[
+    #         "q_proj",
+    #         "o_proj",
+    #         "k_proj",
+    #         "v_proj",
+    #         "gate_proj",
+    #         "up_proj",
+    #         "down_proj",
+    #     ],
+    #     # lora_dropout=0.05,
+    #     # bias="none",
+    #     task_type="CAUSAL_LM",
+    # )
 
-    logging.info(f'Model "{model_id}" and tokenizer loaded')
-    return get_peft_model(model, config), tokenizer
+    # logging.info(f'Model "{model_id}" and tokenizer loaded')
+    # return get_peft_model(model, config), tokenizer
+    return model, tokenizer
