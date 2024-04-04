@@ -1,27 +1,26 @@
 # Use official Python runtime as a parent image
 FROM python:3.9-slim
 
-# Set HuggingFace access token in environment from passing an argument
-ARG access_token
-ENV access_token=$access_token
-
 # Set working directory in container
 WORKDIR /app
 
-# Copy directory contents to /app
-COPY . .
+## Copy requirements to /app
+# COPY pyproject.toml /app/
+COPY requirements.txt /app/
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
+    gcc \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install poetry
-RUN curl -sSL https://raw.githubusercontent.com/python-
-poetry/poetry/master/getr-poetry.py | python -
+# Temp install requirements
+RUN pip3 install -r requirements.txt
 
-# Use poetry to install dependencies
-RUN /root/.poetry/bin/poetry config virtualenvs.create false \
-    && /root/.poetry/bin/poetry install --no-interaction --no-ansi
+# Copy remaining directory contents to /app
+COPY practice_train /app/practice_train/
+# In future I will pull data from remote storage - data is a coupe KB so unneccessary for now
+COPY data /app/data/
 
 CMD ["python", "practice_train/train.py"]

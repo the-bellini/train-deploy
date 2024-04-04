@@ -1,0 +1,8 @@
+# Ignore env and other directories
+.env
+.azureml
+.vscode
+
+dist
+mlruns
+config.json
