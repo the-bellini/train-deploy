@@ -104,12 +104,12 @@ if __name__ == "__main__":
         logging.info("Training...")
         trainer.train()
 
-        # Merge with original model
-        model.merge_and_unload()
+        # # Merge with original model
+        # model.merge_and_unload()
 
         # Push merged model to model registry
         mlflow.log_model(
-            model=model,
+            model=trainer.model,
             artifact_path="shakespearean-model",
             input_example=train_data,
             registered_model_name="tiny-shakespeare",
