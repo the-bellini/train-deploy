@@ -108,7 +108,7 @@ if __name__ == "__main__":
         # model.merge_and_unload()
 
         # Push merged model to model registry
-        mlflow.log_model(
+        mlflow.pytorch.log_model(
             model=trainer.model,
             artifact_path="shakespearean-model",
             input_example=train_data,
