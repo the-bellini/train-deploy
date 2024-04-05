@@ -20,6 +20,11 @@ parser.add_argument(
     default="openai-community/gpt2",
 )
 
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
 
@@ -80,6 +85,8 @@ if __name__ == "__main__":
 
     # Start training logging with MLflow
     logging.info("Start mlflow run")
+    mlflow.set_experiment("shakespearean-gpt")
+    mlflow.autolog()
     with mlflow.start_run() as run:
 
         trainer = transformers.Trainer(
@@ -112,6 +119,8 @@ if __name__ == "__main__":
 
         logging.info("Registering model...")
         mlflow.register_model()
+
+        mlflow.end_run()
 
         # # Use predefined question-answering metrics to evaluate our model.
         # results = mlflow.evaluate(
