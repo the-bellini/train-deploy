@@ -118,9 +118,12 @@ if __name__ == "__main__":
         # mlflow.register_model(f"runs:/{run_id}/{artifact_path}", model_name)
 
         logging.info("Registering model...")
-        mlflow.register_model()
+        mlflow.register_model(
+            f"runs:/{run.info.run_id}/shakespearean-model", "tiny-shakespeare"
+        )
 
         mlflow.end_run()
+        logging.info("End run")
 
         # # Use predefined question-answering metrics to evaluate our model.
         # results = mlflow.evaluate(
