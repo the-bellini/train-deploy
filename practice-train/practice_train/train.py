@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
         # Push merged model to model registry
         mlflow.pytorch.log_model(
-            model=trainer.model,
+            pytorch_model=trainer.model,
             artifact_path="shakespearean-model",
             input_example=train_data,
             registered_model_name="tiny-shakespeare",
