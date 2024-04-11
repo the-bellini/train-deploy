@@ -1,12 +1,7 @@
 services:
   train:
     build:
-      # context: .ß
       dockerfile: Dockerfile
-    image: mycustomimage/train:v1.0 # Adding the image tag here
-    # environment:
-    #   - subscription_id=${subscription_id}
-    #   - resource_group=${resource_group}
-    #   - workspace_name=${workspace_name}
+    image: mycustomimage/train:v1.0
     env_file:
       - .env

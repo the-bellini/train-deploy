@@ -20,7 +20,7 @@ RUN pip3 install -r requirements.txt
 
 # Copy remaining directory contents to /app
 COPY practice_train /app/practice_train/
-COPY .env /app/
+COPY ../.env /app/
 
 # In future I will pull data from remote storage - data is a coupe KB so unneccessary for now
 COPY data /app/data/

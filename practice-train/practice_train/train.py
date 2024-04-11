@@ -33,15 +33,9 @@ if __name__ == "__main__":
     load_dotenv()
     args = parser.parse_args()
 
-    # Set Azure credentials for MLFlow
-    # Enter details of your AzureML workspace
     logging.info("Logging into Azure workspace")
-
-    # credential = InteractiveBrowserCredential(tenant_id=os.getenv("AZURE_TENANT_ID"))
     ml_client = MLClient(
-        # credential=DefaultAzureCredential(),
         credential=EnvironmentCredential(),
-        # credential=credential,
         subscription_id=os.getenv("subscription_id"),
         resource_group_name=os.getenv("resource_group"),
         workspace_name=os.getenv("workspace_name"),
@@ -53,11 +47,6 @@ if __name__ == "__main__":
     ).mlflow_tracking_uri
 
     mlflow.set_tracking_uri(mlflow_tracking_uri)
-
-    # mlflow.set_tracking_uri("http://localhost:5000")
-
-    # In reality, this would be read from remote storate
-    # but for now: quick and dirty read in KBs of data
 
     # Loading model and tokenizer
     model, tokenizer = initialise(args.model_id)
@@ -73,7 +62,6 @@ if __name__ == "__main__":
         auto_find_batch_size=True,
         num_train_epochs=4,
         learning_rate=2e-4,
-        # bf16=True,
         save_total_limit=4,
         logging_steps=10,
         output_dir="./output",
@@ -88,6 +76,9 @@ if __name__ == "__main__":
     mlflow.set_experiment("shakespearean-gpt")
     mlflow.autolog()
     with mlflow.start_run() as run:
+
+        # Add inference script
+        mlflow.log_artifact("./code/score.py")
 
         trainer = transformers.Trainer(
             model=model,
@@ -104,18 +95,13 @@ if __name__ == "__main__":
         logging.info("Training...")
         trainer.train()
 
-        # # Merge with original model
-        # model.merge_and_unload()
-
         # Push merged model to model registry
-        mlflow.pytorch.log_model(
+        logged_model_info = mlflow.pytorch.log_model(
             pytorch_model=trainer.model,
             artifact_path="shakespearean-model",
             input_example=train_data,
             registered_model_name="tiny-shakespeare",
         )
-
-        # mlflow.register_model(f"runs:/{run_id}/{artifact_path}", model_name)
 
         logging.info("Registering model...")
         mlflow.register_model(
@@ -125,13 +111,13 @@ if __name__ == "__main__":
         mlflow.end_run()
         logging.info("End run")
 
-        # # Use predefined question-answering metrics to evaluate our model.
-        # results = mlflow.evaluate(
-        #     logged_model_info.model_uri,
-        #     eval_data,
-        #     targets="ground_truth",
-        #     model_type="question-answering",
-        # )
+        # Use predefined question-answering metrics to evaluate our model.
+        results = mlflow.evaluate(
+            logged_model_info.model_uri,
+            eval_data,
+            targets="ground_truth",
+            model_type="question-answering",
+        )
 
-        # # Evaluation result for each data record is available in `results.tables`.
-        # eval_table = results.tables["eval_results_table"]
+        # Evaluation result for each data record is available in `results.tables`.
+        eval_table = results.tables["eval_results_table"]
